@@ -1,0 +1,19 @@
+version: "3"
+services:
+  web: # サービス名をwebとする
+    # 第2章で作成したimageのリポジトリに設定
+    image: morimorimokenpi/get-started:part2 #pullしたいリポジトリを指定
+    deploy:
+      replicas: 8 #webと名付けたimageのインスタンスを5つ用意
+      resources:
+        limits:
+          cpus: "0.1" # 1つのインスタンスにつきCPUは10%まで使用可能
+          memory: 50M # 1つのインスタンスにつきメモリは50MBまで使用可能
+      restart_policy:
+        condition: on-failure
+    ports: # ポート指定 webの80ポートをホスト(自分のマシン)の4000ポートに割り当てる
+      - "4000:80"
+    networks:
+      - webnet # webnetと呼ばれる負荷分散ネットワークに指定
+networks:
+  webnet:
